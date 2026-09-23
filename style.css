@@ -1,0 +1,901 @@
+/* ==========================================================================
+   OUR LITTLE UNIVERSE — INTERACTIVE LOVE GAME STYLESHEET
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-dark: #03040b;
+  --bg-navy: #080a1e;
+  --bg-purple: #140d2b;
+  --bg-card: rgba(18, 14, 38, 0.75);
+  --border-glass: rgba(255, 255, 255, 0.14);
+  --border-glow: rgba(255, 179, 193, 0.35);
+
+  --color-pink-soft: #ffb3c1;
+  --color-pink-light: #ffe5ec;
+  --color-rose: #ff758f;
+  --color-rose-deep: #ff4d6d;
+  --color-crimson: #c9184a;
+  --color-gold: #ffd166;
+  --color-cyan: #4cc9f0;
+  --color-text-main: #f8f9fa;
+  --color-text-muted: rgba(248, 249, 250, 0.8);
+
+  --font-serif: 'Cinzel', serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+
+  --shadow-planet: 0 0 30px rgba(255, 77, 109, 0.4);
+  --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.75);
+
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  touch-action: manipulation;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ==========================================================================
+   CANVAS & AMBIENT GLOW
+   ========================================================================== */
+#spaceCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 117, 143, 0.12) 0%, rgba(76, 201, 240, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  transition: transform 0.05s ease-out;
+}
+
+/* ==========================================================================
+   HALAMAN PEMBUKA — INTRO CINEMATIC
+   ========================================================================== */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #020206;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+
+.intro-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  display: none !important;
+}
+
+.intro-light-dot {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #fff, 0 0 40px var(--color-rose);
+  animation: expandGalaxy 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  margin-bottom: 2rem;
+}
+
+@keyframes expandGalaxy {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px #fff;
+  }
+  50% {
+    transform: scale(6);
+    box-shadow: 0 0 40px var(--color-rose-deep), 0 0 80px var(--color-cyan);
+  }
+  100% {
+    transform: scale(2.5);
+    box-shadow: 0 0 30px var(--color-pink-soft);
+  }
+}
+
+.intro-welcome {
+  font-size: 0.9rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-rose);
+  opacity: 0;
+  animation: fadeInText 1.5s ease 1s forwards;
+}
+
+.intro-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 7vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #ffffff 30%, var(--color-pink-soft) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0.8rem 0 1.5rem;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInText 1.5s ease 1.4s forwards;
+}
+
+.intro-subtext {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--color-text-muted);
+  font-style: italic;
+  max-width: 480px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInText 1.5s ease 1.8s forwards;
+}
+
+.btn-enter-universe {
+  margin-top: 2.5rem;
+  background: linear-gradient(135deg, rgba(255, 77, 109, 0.35) 0%, rgba(201, 24, 74, 0.55) 100%);
+  border: 1px solid rgba(255, 179, 193, 0.5);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 1.1rem 2.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 35px rgba(255, 77, 109, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: var(--transition-smooth);
+  opacity: 0;
+  animation: fadeInText 1.5s ease 2.2s forwards;
+  position: relative;
+  z-index: 1001;
+}
+
+.btn-enter-universe:hover, .btn-enter-universe:active {
+  transform: scale(1.06);
+  border-color: #fff;
+  box-shadow: 0 15px 45px rgba(255, 77, 109, 0.65);
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   MAIN UNIVERSE VIEW (SYSTEM OF PLANETS)
+   ========================================================================== */
+.universe-container {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+
+.universe-container.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.universe-header {
+  position: absolute;
+  top: 25px;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.universe-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+  color: var(--color-pink-soft);
+  text-shadow: 0 0 15px rgba(255, 117, 143, 0.4);
+}
+
+.universe-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+/* Orbit Stage Container */
+.orbit-stage {
+  position: relative;
+  width: min(85vw, 540px);
+  height: min(85vw, 540px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 179, 193, 0.2);
+  box-shadow: inset 0 0 30px rgba(255, 117, 143, 0.04), 0 0 30px rgba(255, 117, 143, 0.04);
+  pointer-events: none;
+}
+
+/* Central Planet: US */
+.center-planet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110px;
+  height: 110px;
+  margin-top: -55px;
+  margin-left: -55px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--color-rose) 45%, var(--color-crimson) 80%, #0a0412 100%);
+  box-shadow: 0 0 45px rgba(255, 77, 109, 0.65), inset -5px -5px 15px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: var(--transition-bounce);
+  animation: centerPulse 3s infinite ease-in-out alternate;
+}
+
+.center-planet:hover, .center-planet:active {
+  transform: scale(1.1);
+  box-shadow: 0 0 65px rgba(255, 77, 109, 0.85);
+}
+
+@keyframes centerPulse {
+  0% { box-shadow: 0 0 35px rgba(255, 77, 109, 0.5); }
+  100% { box-shadow: 0 0 60px rgba(255, 117, 143, 0.85); }
+}
+
+.center-planet-text {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.center-planet-subtext {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* Orbiting Planets */
+.planet-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 68px;
+  height: 68px;
+  margin-top: -34px;
+  margin-left: -34px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 25;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.planet-item:hover, .planet-item:active {
+  transform: scale(1.22) !important;
+  z-index: 30;
+}
+
+.planet-icon {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.planet-label {
+  position: absolute;
+  bottom: -22px;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-pink-soft);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+}
+
+.planet-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-rose-deep);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition-bounce);
+  pointer-events: none;
+}
+
+.planet-item.visited .planet-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Individual Planet Aesthetics */
+.planet-1 {
+  background: radial-gradient(circle at 30% 30%, #e0c3fc 0%, #8ec5fc 100%);
+  box-shadow: 0 0 25px rgba(142, 197, 252, 0.6);
+}
+.planet-2 {
+  background: radial-gradient(circle at 30% 30%, #ffe3a8 0%, #ffb703 100%);
+  box-shadow: 0 0 25px rgba(255, 183, 3, 0.6);
+}
+.planet-3 {
+  background: radial-gradient(circle at 30% 30%, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+  box-shadow: 0 0 25px rgba(255, 154, 158, 0.6);
+}
+.planet-4 {
+  background: radial-gradient(circle at 30% 30%, #ff758f 0%, #c9184a 100%);
+  box-shadow: 0 0 25px rgba(255, 117, 143, 0.7);
+}
+.planet-5 {
+  background: radial-gradient(circle at 30% 30%, #a1c4fd 0%, #c2e9fb 100%);
+  box-shadow: 0 0 25px rgba(161, 196, 253, 0.6);
+}
+
+/* Secret Planet */
+.planet-secret {
+  background: radial-gradient(circle at 30% 30%, #f72585 0%, #7209b7 60%, #3a0ca3 100%);
+  box-shadow: 0 0 35px rgba(247, 37, 133, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0);
+  transition: opacity 1s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.planet-secret.unlocked {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  animation: secretPulse 2s infinite ease-in-out alternate;
+}
+
+@keyframes secretPulse {
+  0% { box-shadow: 0 0 25px rgba(247, 37, 133, 0.6); }
+  100% { box-shadow: 0 0 55px rgba(247, 37, 133, 0.95); }
+}
+
+/* Orbit Drag Hint */
+.orbit-hint {
+  position: absolute;
+  bottom: 25px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1.2rem;
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   MODAL WINDOW SYSTEM (PLANET CONTENT)
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(2, 3, 10, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-card);
+  border-radius: 28px;
+  padding: 2.8rem 2.2rem;
+  max-width: 580px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.88) translateY(15px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.active .modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.btn-close-modal {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  z-index: 10;
+}
+
+.btn-close-modal:hover, .btn-close-modal:active {
+  background: rgba(255, 77, 109, 0.4);
+  border-color: var(--color-rose-deep);
+}
+
+.modal-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--color-rose);
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+/* ==========================================================================
+   MINI-GAME 1: LOVE METER (PLANET 2)
+   ========================================================================== */
+.love-meter-container {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.love-meter-display {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 700;
+  color: var(--color-pink-soft);
+  margin: 1.5rem 0;
+  text-shadow: 0 0 25px rgba(255, 117, 143, 0.5);
+  transition: color 0.3s ease;
+}
+
+.love-meter-display.glitch {
+  color: var(--color-rose-deep);
+  animation: glitchText 0.15s infinite;
+}
+
+@keyframes glitchText {
+  0% { transform: translate(0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 1px); }
+  100% { transform: translate(0); }
+}
+
+.love-meter-bar-outer {
+  width: 100%;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.love-meter-bar-inner {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-pink-soft), var(--color-rose-deep), var(--color-crimson));
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+.btn-action-primary {
+  background: linear-gradient(135deg, var(--color-rose-deep) 0%, var(--color-crimson) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.9rem 2.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(255, 77, 109, 0.4);
+  transition: var(--transition-smooth);
+}
+
+.btn-action-primary:hover, .btn-action-primary:active {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(255, 77, 109, 0.6);
+}
+
+/* ==========================================================================
+   MINI-GAME 2: I'M SCARED (PLANET 3)
+   ========================================================================== */
+.scared-container {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.beating-heart-btn {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 77, 109, 0.35), transparent 70%);
+  border: 1px solid rgba(255, 117, 143, 0.5);
+  margin: 1.5rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+  animation: heartPulse 1.6s infinite ease-in-out;
+  transition: var(--transition-smooth);
+}
+
+.beating-heart-btn:hover, .beating-heart-btn:active {
+  transform: scale(1.15);
+  box-shadow: 0 0 45px rgba(255, 77, 109, 0.7);
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* ==========================================================================
+   MINI-GAME 3: PROMISE CARDS (PLANET 4)
+   ========================================================================== */
+.promises-card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.promise-card-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.promise-card-item:hover, .promise-card-item:active {
+  border-color: rgba(255, 179, 193, 0.4);
+  background: rgba(255, 117, 143, 0.1);
+}
+
+.promise-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--color-pink-soft);
+  pointer-events: none;
+}
+
+.promise-card-body {
+  margin-top: 0.8rem;
+  font-size: 0.98rem;
+  color: var(--color-text-muted);
+  display: none;
+  line-height: 1.6;
+  pointer-events: none;
+}
+
+.promise-card-item.open .promise-card-body {
+  display: block;
+  animation: fadeInText 0.4s ease forwards;
+}
+
+.promise-card-item.open {
+  border-color: var(--color-rose-deep);
+  background: rgba(255, 77, 109, 0.14);
+}
+
+/* ==========================================================================
+   MINI-GAME 4: FUTURE TIMELINE (PLANET 5)
+   ========================================================================== */
+.future-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.future-timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 20px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--color-pink-soft), transparent);
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding-left: 0.5rem;
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-rose);
+  box-shadow: 0 0 10px var(--color-rose);
+  margin-top: 5px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.timeline-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 0.8rem 1.2rem;
+  flex: 1;
+}
+
+.timeline-title {
+  font-weight: 600;
+  color: var(--color-pink-light);
+}
+
+.timeline-tag {
+  font-size: 0.8rem;
+  color: var(--color-rose);
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+
+/* ==========================================================================
+   SECRET PLANET SCREEN
+   ========================================================================== */
+.secret-modal-backdrop {
+  background: #000;
+}
+
+.secret-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #ffffff 0%, var(--color-rose-deep) 60%, var(--color-crimson) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 40px rgba(255, 77, 109, 0.7));
+  margin: 1.5rem 0;
+  animation: floatGiant 3s ease-in-out infinite alternate;
+}
+
+/* ==========================================================================
+   FINAL SCENE OVERLAY & FINALE VORTEX
+   ========================================================================== */
+.final-scene-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  background: rgba(3, 4, 12, 0.95);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+
+.final-scene-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.final-plea-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 7vw, 4rem);
+  color: var(--color-pink-light);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 35px rgba(255, 77, 109, 0.6);
+}
+
+.btn-stay-universe {
+  background: linear-gradient(135deg, var(--color-rose-deep) 0%, var(--color-crimson) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 1.1rem 2.8rem;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 2rem;
+  box-shadow: 0 10px 40px rgba(255, 77, 109, 0.5);
+  transition: var(--transition-smooth);
+}
+
+.btn-stay-universe:hover, .btn-stay-universe:active {
+  transform: scale(1.06);
+  box-shadow: 0 15px 50px rgba(255, 77, 109, 0.75);
+}
+
+/* ==========================================================================
+   FLOATING MUSIC PLAYER
+   ========================================================================== */
+.music-player-pill {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 900;
+  background: rgba(14, 11, 28, 0.85);
+  border: 1px solid rgba(255, 179, 193, 0.3);
+  backdrop-filter: blur(16px);
+  border-radius: 50px;
+  padding: 0.5rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.btn-music-toggle {
+  background: transparent;
+  border: none;
+  color: var(--color-pink-soft);
+  font-size: 1.1rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.equalizer-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+}
+
+.eq-bar {
+  width: 3px;
+  background: var(--color-rose);
+  border-radius: 2px;
+  height: 3px;
+}
+
+.music-player-pill.playing .eq-bar:nth-child(1) { animation: eqBounce 1.2s infinite ease-in-out 0.1s; }
+.music-player-pill.playing .eq-bar:nth-child(2) { animation: eqBounce 1.0s infinite ease-in-out 0.3s; }
+.music-player-pill.playing .eq-bar:nth-child(3) { animation: eqBounce 1.4s infinite ease-in-out 0.2s; }
+
+@keyframes eqBounce {
+  0%, 100% { height: 3px; }
+  50% { height: 14px; }
+}
+
+.music-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   MOBILE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 640px) {
+  .orbit-stage {
+    width: 310px;
+    height: 310px;
+  }
+  .center-planet {
+    width: 85px;
+    height: 85px;
+    margin-top: -42.5px;
+    margin-left: -42.5px;
+  }
+  .center-planet-text {
+    font-size: 1.1rem;
+  }
+  .planet-item {
+    width: 54px;
+    height: 54px;
+    margin-top: -27px;
+    margin-left: -27px;
+  }
+  .planet-icon {
+    font-size: 1.15rem;
+  }
+  .planet-label {
+    font-size: 0.68rem;
+    bottom: -18px;
+  }
+  .modal-card {
+    padding: 2.2rem 1.4rem;
+    border-radius: 22px;
+  }
+  .music-player-pill {
+    bottom: 14px;
+    right: 14px;
+  }
+  .music-label {
+    display: none;
+  }
+}

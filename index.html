@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OUR LITTLE UNIVERSE — Maybe We're Still Writing Our Story ❤️</title>
+  <meta name="description" content="An interactive cosmic love journey created specially for you. Explore our little universe together.">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Space Canvas Background Layer -->
+  <canvas id="spaceCanvas"></canvas>
+  
+  <!-- Interactive Ambient Cursor Follow Light -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Audio Element -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music/romantic.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Floating Music Player Controls -->
+  <div class="music-player-pill" id="musicPlayer">
+    <button class="btn-music-toggle" id="btnMusicToggle" aria-label="Play/Pause Music">
+      <span id="musicIcon">▶</span>
+    </button>
+    <div class="equalizer-bars">
+      <span class="eq-bar"></span>
+      <span class="eq-bar"></span>
+      <span class="eq-bar"></span>
+    </div>
+    <span class="music-label">Our Universe Soundtrack</span>
+  </div>
+
+  <!-- ==========================================================================
+       HALAMAN PEMBUKA — INTRO CINEMATIC
+       ========================================================================== -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-light-dot"></div>
+    <div class="intro-welcome">Welcome to...</div>
+    <h1 class="intro-title">OUR LITTLE UNIVERSE</h1>
+    <p class="intro-subtext">
+      "There's only one person I want to explore this universe with."
+    </p>
+    <button class="btn-enter-universe" id="btnEnterUniverse">
+      ENTER OUR UNIVERSE ✨
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN UNIVERSE — INTERACTIVE SOLAR SYSTEM VIEW
+       ========================================================================== -->
+  <main class="universe-container" id="universeView">
+    <header class="universe-header">
+      <h2 class="universe-title">OUR LITTLE UNIVERSE</h2>
+      <p class="universe-subtitle">Maybe we're still writing our story...</p>
+    </header>
+
+    <div class="orbit-stage" id="orbitStage">
+      <div class="orbit-ring"></div>
+
+      <!-- Central Planet: US -->
+      <div class="center-planet" id="centerPlanet" role="button" aria-label="Our Universe Center">
+        <span class="center-planet-text">US</span>
+        <span class="center-planet-subtext">❤️</span>
+      </div>
+
+      <!-- Orbiting Interactive Planets -->
+      <div class="planet-item planet-1" id="planet1" data-planet="1">
+        <div class="planet-icon">🌙</div>
+        <div class="planet-label">WHY YOU?</div>
+        <div class="planet-badge" id="badge1">✓</div>
+      </div>
+
+      <div class="planet-item planet-2" id="planet2" data-planet="2">
+        <div class="planet-icon">⭐</div>
+        <div class="planet-label">MY FEELINGS</div>
+        <div class="planet-badge" id="badge2">✓</div>
+      </div>
+
+      <div class="planet-item planet-3" id="planet3" data-planet="3">
+        <div class="planet-icon">💫</div>
+        <div class="planet-label">I'M SCARED</div>
+        <div class="planet-badge" id="badge3">✓</div>
+      </div>
+
+      <div class="planet-item planet-4" id="planet4" data-planet="4">
+        <div class="planet-icon">❤️</div>
+        <div class="planet-label">MY PROMISE</div>
+        <div class="planet-badge" id="badge4">✓</div>
+      </div>
+
+      <div class="planet-item planet-5" id="planet5" data-planet="5">
+        <div class="planet-icon">🌌</div>
+        <div class="planet-label">OUR FUTURE</div>
+        <div class="planet-badge" id="badge5">✓</div>
+      </div>
+
+      <!-- Secret Planet (Unlocked after exploring all 5 planets) -->
+      <div class="planet-item planet-secret" id="planetSecret" data-planet="secret">
+        <div class="planet-icon">🔮</div>
+        <div class="planet-label" style="color: var(--color-pink-light); font-weight: 700;">SECRET</div>
+        <div class="planet-badge">✦</div>
+      </div>
+    </div>
+
+    <div class="orbit-hint">
+      ✦ Sentuh / klik planet untuk menjelajah pesan ✦
+    </div>
+  </main>
+
+
+  <!-- ==========================================================================
+       PLANET 1 MODAL — WHY YOU?
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalWhyYou">
+    <div class="modal-card">
+      <button class="btn-close-modal" aria-label="Close">✕</button>
+      <div class="modal-tag">🌙 Planet 1</div>
+      <h3 class="modal-title">WHY YOU?</h3>
+      
+      <div style="font-size: 1.1rem; line-height: 1.9; color: var(--color-text-muted);">
+        <p style="margin-bottom: 1.2rem;">
+          Aku juga nggak tahu kapan tepatnya kamu mulai terasa spesial.
+        </p>
+        <p style="margin-bottom: 1.2rem;">
+          Tapi tiba-tiba, aku mulai menunggu pesan kamu.<br>
+          Mulai senang ketika kamu mencari aku.<br>
+          Mulai kepikiran kamu di tengah hari.
+        </p>
+        <p style="font-weight: 600; color: var(--color-pink-soft); font-size: 1.2rem; margin-top: 1.5rem;">
+          Dan akhirnya aku sadar... ternyata aku mulai sayang sama kamu.
+        </p>
+      </div>
+
+      <div style="margin-top: 2rem; text-align: right;">
+        <button class="btn-action-primary modal-next-btn">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       PLANET 2 MODAL — MY FEELINGS (LOVE METER)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalFeelings">
+    <div class="modal-card">
+      <button class="btn-close-modal" aria-label="Close">✕</button>
+      <div class="modal-tag">⭐ Planet 2</div>
+      <h3 class="modal-title">HOW MUCH?</h3>
+
+      <div class="love-meter-container">
+        <p style="color: var(--color-text-muted);">Tekan tombol di bawah untuk mengukur perasaanku:</p>
+        
+        <div class="love-meter-display" id="loveMeterCount">0%</div>
+        
+        <div class="love-meter-bar-outer">
+          <div class="love-meter-bar-inner" id="loveMeterBar"></div>
+        </div>
+
+        <button class="btn-action-primary" id="btnMeasureLove">
+          Measure My Love 💖
+        </button>
+
+        <div id="loveMeterResult" style="margin-top: 2rem; display: none;">
+          <div style="font-family: var(--font-serif); font-size: 1.8rem; color: var(--color-rose-deep); font-weight: 700; margin-bottom: 0.8rem;">
+            ERROR
+          </div>
+          <p style="font-size: 1.15rem; font-style: italic; color: var(--color-pink-light); margin-bottom: 0.5rem;">
+            "Too much love to calculate."
+          </p>
+          <p style="color: var(--color-text-muted);">
+            Karena ternyata rasa sayangku ke kamu nggak bisa dihitung pakai angka.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       PLANET 3 MODAL — I'M SCARED
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalScared">
+    <div class="modal-card">
+      <button class="btn-close-modal" aria-label="Close">✕</button>
+      <div class="modal-tag">💫 Planet 3</div>
+      <h3 class="modal-title">I'M SCARED</h3>
+
+      <div class="scared-container">
+        <p style="font-style: italic; color: var(--color-text-muted);">
+          There's something I'm scared of...
+        </p>
+
+        <div class="beating-heart-btn" id="btnBeatingHeart" role="button" title="Klik hatiku">
+          ❤️
+        </div>
+        <p style="font-size: 0.85rem; color: var(--color-rose); margin-bottom: 1.5rem;">(Sentuh hatiku)</p>
+
+        <div id="scaredSecretContent" style="display: none; text-align: left; background: rgba(255, 77, 109, 0.08); padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(255, 179, 193, 0.25);">
+          <h4 style="font-family: var(--font-serif); font-size: 2rem; color: var(--color-pink-soft); margin-bottom: 1rem; text-align: center;">
+            "Losing you."
+          </h4>
+          <p style="line-height: 1.8; color: var(--color-text-main); margin-bottom: 1rem;">
+            Aku nggak takut kalau hubungan kita nggak selalu sempurna. Aku lebih takut kalau suatu hari kita berhenti mencoba.
+          </p>
+          <p style="line-height: 1.8; color: var(--color-text-main); margin-bottom: 1.2rem;">
+            Aku takut kehilangan seseorang yang sudah mulai berarti buat aku.
+          </p>
+          <p style="font-weight: 600; color: var(--color-rose-deep); text-align: center; font-size: 1.15rem;">
+            Makanya kalau nanti ada masalah...<br>Please don't disappear.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       PLANET 4 MODAL — MY PROMISE
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalPromise">
+    <div class="modal-card">
+      <button class="btn-close-modal" aria-label="Close">✕</button>
+      <div class="modal-tag">❤️ Planet 4</div>
+      <h3 class="modal-title">MY PROMISE</h3>
+      <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Open my promises one by one:</p>
+
+      <div class="promises-card-grid">
+        <div class="promise-card-item">
+          <div class="promise-card-header">
+            <span>CARD 1: "I'll listen."</span>
+            <span>✦</span>
+          </div>
+          <div class="promise-card-body">
+            "Aku akan berusaha mendengarkan kamu."
+          </div>
+        </div>
+
+        <div class="promise-card-item">
+          <div class="promise-card-header">
+            <span>CARD 2: "I'll understand."</span>
+            <span>✦</span>
+          </div>
+          <div class="promise-card-body">
+            "Aku akan belajar memahami kamu."
+          </div>
+        </div>
+
+        <div class="promise-card-item">
+          <div class="promise-card-header">
+            <span>CARD 3: "I'll stay and talk."</span>
+            <span>✦</span>
+          </div>
+          <div class="promise-card-body">
+            "Kalau ada masalah, aku ingin membicarakannya, bukan langsung meninggalkan."
+          </div>
+        </div>
+
+        <div class="promise-card-item">
+          <div class="promise-card-header">
+            <span>CARD 4: "I'll keep trying."</span>
+            <span>✦</span>
+          </div>
+          <div class="promise-card-body">
+            "Aku mungkin nggak sempurna, tapi aku akan terus berusaha."
+          </div>
+        </div>
+
+        <div class="promise-card-item">
+          <div class="promise-card-header" style="color: var(--color-rose-deep);">
+            <span>CARD 5: "I'll choose us."</span>
+            <span>🤍</span>
+          </div>
+          <div class="promise-card-body" style="font-weight: 600; color: var(--color-pink-light);">
+            "Selama kamu masih mau berjuang, aku juga ingin terus memperjuangkan kita."
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       PLANET 5 MODAL — OUR FUTURE
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalFuture">
+    <div class="modal-card">
+      <button class="btn-close-modal" aria-label="Close">✕</button>
+      <div class="modal-tag">🌌 Planet 5</div>
+      <h3 class="modal-title" style="font-size: 1.8rem;">STORIES WE HAVEN'T WRITTEN YET</h3>
+
+      <div class="future-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">First date</div>
+            <div class="timeline-tag">???</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">First trip</div>
+            <div class="timeline-tag">???</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">Our random midnight conversation</div>
+            <div class="timeline-tag">???</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">Our stupid little jokes</div>
+            <div class="timeline-tag">???</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">Our favorite place</div>
+            <div class="timeline-tag">???</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">More memories...</div>
+            <div class="timeline-tag">???</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: center; border-top: 1px dashed rgba(255, 179, 193, 0.2); padding-top: 1.2rem;">
+        <p style="font-style: italic; color: var(--color-text-muted);">
+          "Because we haven't written them yet."
+        </p>
+        <p style="font-weight: 600; color: var(--color-pink-soft); margin-top: 0.5rem; font-size: 1.1rem;">
+          Maybe we can fill them together. ✨
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       SECRET PLANET MODAL — SECRET
+       ========================================================================== -->
+  <div class="modal-backdrop secret-modal-backdrop" id="modalSecret">
+    <div class="modal-card" style="background: rgba(10, 5, 22, 0.95); text-align: center; border-color: rgba(247, 37, 133, 0.4);">
+      <button class="btn-close-modal" aria-label="Close">✕</button>
+      <div class="modal-tag" style="color: var(--color-rose-deep);">🔮 SECRET UNLOCKED</div>
+
+      <div id="secretIntroText" style="font-style: italic; color: var(--color-text-muted); margin-top: 1rem;">
+        "Okay... I've been keeping this one for the end."
+      </div>
+
+      <div class="secret-title" id="secretBigText">
+        I LOVE YOU.
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.8rem; font-size: 1.25rem;">
+        <p style="font-family: var(--font-serif); font-size: 2rem; color: var(--color-pink-light); font-weight: 700;">
+          Banget.
+        </p>
+        <p style="color: var(--color-text-muted); font-size: 1.1rem;">
+          Lebih dari yang bisa aku jelaskan lewat website ini. ❤️
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       FINAL SCENE OVERLAY & FINALE VORTEX
+       ========================================================================== -->
+  <div class="final-scene-overlay" id="finalSceneOverlay">
+    <div style="max-width: 580px; text-align: center;">
+      <div class="modal-tag" style="letter-spacing: 0.3em; margin-bottom: 1.5rem;">One last thing...</div>
+      
+      <div class="final-plea-title">
+        "Please don't leave me."
+      </div>
+
+      <div style="line-height: 2; color: var(--color-text-muted); font-size: 1.1rem; margin-bottom: 1.5rem;">
+        <p>Kalau suatu hari aku salah, tolong bilang.</p>
+        <p>Kalau suatu hari kamu kecewa, tolong ceritakan.</p>
+        <p>Kalau suatu hari kita punya masalah, ayo selesaikan.</p>
+        <p style="margin-top: 1rem; color: var(--color-pink-soft);">Aku nggak meminta kita untuk selalu sempurna.</p>
+        <p style="font-weight: 600; color: var(--color-pink-light);">Aku cuma ingin kita selalu punya alasan untuk mencoba lagi.</p>
+      </div>
+
+      <p style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--color-rose-deep); font-style: italic;">
+        Because... I don't want to lose you.
+      </p>
+
+      <button class="btn-stay-universe" id="btnStayUniverse">
+        Stay in my universe ❤️
+      </button>
+
+      <div id="finaleLoveOverlay" style="display: none; margin-top: 2.5rem; background: rgba(255, 77, 109, 0.12); padding: 2rem; border-radius: 24px; border: 1px solid rgba(255, 179, 193, 0.4);">
+        <h3 style="font-family: var(--font-serif); font-size: 2.2rem; color: var(--color-pink-soft); margin-bottom: 1rem;">
+          Then let's keep writing our story.
+        </h3>
+        <p style="font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;">
+          Together.
+        </p>
+        <p style="font-size: 1.1rem; color: var(--color-pink-light);">
+          Thank you for choosing me.<br>
+          <strong style="font-size: 1.4rem; color: var(--color-rose);">I love you so, so, so much. ❤️</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
